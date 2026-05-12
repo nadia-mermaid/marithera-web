@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MARITHERA — 50일 머메이드 챌린지</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --teal: #00b8a9;
+      --teal-dark: #007a70;
+      --teal-light: #e0f5f3;
+      --teal-pale: #f0fdf8;
+      --navy: #0a2a3a;
+      --slate: #5a8a9a;
+      --border: #b0e8e0;
+      --white: #ffffff;
+      --bg: #f0fafa;
+      --card: #ffffff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--navy);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .app-header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .app-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      color: var(--navy);
+    }
+    .app-logo span { color: var(--teal); }
+    .header-day {
+      font-size: 12px;
+      color: var(--slate);
+      background: var(--teal-light);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+
+    /* ── NAV TABS ── */
+    .nav-tabs {
+      display: flex;
+      gap: 4px;
+      padding: 12px 24px;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-tab {
+      padding: 8px 18px;
+      border-radius: 20px;
+      border: none;
+      background: transparent;
+      color: var(--slate);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .nav-tab.active {
+      background: var(--teal);
+      color: white;
+      font-weight: 500;
+    }
+    .nav-tab:hover:not(.active) { background: var(--teal-light); }
+
+    /* ── PAGES ── */
+    .page { display: none; padding: 24px; max-width: 900px; margin: 0 auto; }
+    .page.active { display: block; }
+
+    /* ── HOME PAGE ── */
+    .hero-card {
+      background: linear-gradient(135deg, #00c4b0, #007a70);
+      border-radius: 20px;
+      padding: 28px;
+      color: white;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-card::before {
+      content: '🧜‍♀️';
+      position: absolute;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 64px;
+      opacity: 0.3;
+    }
+    .hero-badge {
+      background: rgba(255,255,255,0.2);
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .hero-sub { font-size: 13px; opacity: 0.85; margin-bottom: 16px; }
+    .progress-row { display: flex; align-items: center; gap: 12px; }
+    .progress-bar-bg {
+      flex: 1;
+      height: 6px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 3px;
+    }
+    .progress-bar-fill {
+      height: 6px;
+      background: white;
+      border-radius: 3px;
+      transition: width 0.5s ease;
+    }
+    .progress-label { font-size: 12px; white-space: nowrap; }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: var(--slate);
+      text-transform: uppercase;
+      margin: 20px 0 10px;
+    }
+
+    /* ── STREAK ── */
+    .streak-row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+    }
+    .streak-dot {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      flex-shrink: 0;
+      border: 1px solid var(--border);
+    }
+    .streak-dot.done { background: var(--teal); color: white; border-color: var(--teal); }
+    .streak-dot.today { background: var(--navy); color: white; border-color: var(--navy); }
+    .streak-dot.future { background: var(--teal-light); color: var(--slate); }
+
+    /* ── MISSION CARDS ── */
+    .mission-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .mission-card:hover { box-shadow: 0 4px 16px rgba(0,184,169,0.15); transform: translateY(-1px); }
+    .mission-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .mission-info { flex: 1; }
+    .mission-name { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+    .mission-meta { font-size: 12px; color: var(--slate); }
+    .badge {
+      padding: 4px 10px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .badge-active { background: var(--teal-light); color: var(--teal-dark); }
+    .badge-done { background: #b0ede8; color: var(--teal-dark); }
+    .badge-locked { background: #f0f0f0; color: #aaa; }
+
+    /* ── WORKOUT PAGE ── */
+    .workout-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .back-btn {
+      background: var(--teal-light);
+      border: none;
+      border-radius: 10px;
+      padding: 8px 16px;
+      color: var(--teal);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .back-btn:hover { background: var(--border); }
+    .workout-title { font-size: 14px; font-weight: 600; color: var(--navy); }
+    .workout-progress-text { font-size: 12px; color: var(--slate); margin-left: auto; }
+
+    .move-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+    }
+    .move-tab {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--teal-light);
+      color: var(--slate);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .move-tab.active { background: var(--teal); border-color: var(--teal); color: white; }
+    .move-tab.done { background: #b0ede8; border-color: var(--teal); color: var(--teal-dark); }
+
+    .move-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 14px;
+    }
+    .tool-badge {
+      background: #fff0e0;
+      border: 1px solid #ffd0a0;
+      border-radius: 8px;
+      padding: 4px 10px;
+      font-size: 11px;
+      color: #a06000;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+    .move-category {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--teal);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .move-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .move-duration { font-size: 13px; color: var(--slate); margin-bottom: 16px; }
+    .divider { height: 1px; background: var(--border); margin-bottom: 16px; }
+    .section-title-small {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--slate);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .move-desc { font-size: 15px; line-height: 1.7; color: var(--navy); margin-bottom: 16px; }
+    .tip-box {
+      background: var(--teal-pale);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .tip-title { font-size: 12px; font-weight: 700; color: var(--teal-dark); margin-bottom: 6px; }
+    .tip-text { font-size: 13px; line-height: 1.6; color: var(--slate); }
+
+    .timer-btn {
+      width: 100%;
+      background: var(--teal-light);
+      border: 1px solid var(--teal);
+      border-radius: 12px;
+      padding: 12px;
+      color: var(--teal);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-bottom: 12px;
+      transition: all 0.2s;
+    }
+    .timer-btn:hover { background: var(--border); }
+
+    .done-btn {
+      width: 100%;
+      background: var(--teal);
+      border: none;
+      border-radius: 14px;
+      padding: 18px;
+      color: white;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .done-btn:hover { background: var(--teal-dark); transform: translateY(-1px); }
+    .done-btn.completed { background: #b0ede8; color: var(--teal-dark); }
+
+    .all-done-card {
+      background: #d0f5f0;
+      border: 1px solid var(--teal);
+      border-radius: 16px;
+      padding: 28px;
+      text-align: center;
+    }
+    .all-done-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--teal-dark);
+      margin-bottom: 8px;
+    }
+    .all-done-desc { font-size: 14px; color: var(--slate); line-height: 1.6; margin-bottom: 20px; }
+    .home-btn {
+      background: var(--teal);
+      border: none;
+      border-radius: 12px;
+      padding: 14px 28px;
+      color: white;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .home-btn:hover { background: var(--teal-dark); }
+
+    /* ── CALENDAR PAGE ── */
+    .calendar-stats {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 24px;
+    }
+    .stat-item { text-align: center; }
+    .stat-num { font-size: 28px; font-weight: 700; color: var(--teal); font-family: 'Cormorant Garamond', serif; }
+    .stat-label { font-size: 11px; color: var(--slate); margin-top: 2px; }
+
+    .week-block {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .week-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .week-label {
+      background: var(--teal);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 8px;
+    }
+    .week-theme { font-size: 12px; color: var(--slate); }
+    .day-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .cal-dot {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .cal-dot:hover { transform: scale(1.1); }
+    .cal-dot.done { background: #b0ede8; border-color: var(--teal); color: var(--teal-dark); }
+    .cal-dot.today { background: var(--teal); border-color: var(--teal); color: white; }
+    .cal-dot.future { background: var(--teal-light); color: var(--slate); }
+
+    /* ── DAY DETAIL MODAL ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 200;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-card {
+      background: white;
+      border-radius: 24px 24px 0 0;
+      padding: 28px;
+      width: 100%;
+      max-width: 900px;
+      max-height: 80vh;
+      overflow-y: auto;
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--teal);
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: var(--slate);
+      cursor: pointer;
+      padding: 4px;
+    }
+    .modal-theme { font-size: 13px; color: var(--slate); margin-bottom: 16px; }
+    .modal-moves-title { font-size: 12px; font-weight: 700; color: var(--navy); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+    .modal-move-item { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .modal-move-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--teal-light);
+      color: var(--teal);
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .modal-move-name { font-size: 14px; color: var(--navy); }
+    .modal-badge {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 13px;
+    }
+    .modal-badge.done { background: var(--teal-light); color: var(--teal-dark); }
+    .modal-badge.today { background: var(--teal); color: white; cursor: pointer; font-weight: 600; }
+    .modal-badge.today:hover { background: var(--teal-dark); }
+    .modal-badge.future { background: #f5f5f5; color: #aaa; }
+
+    /* ── TIMER PAGE ── */
+    .timer-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 24px;
+    }
+    .timer-display {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 96px;
+      font-weight: 300;
+      color: var(--navy);
+      letter-spacing: -2px;
+      margin: 32px 0;
+      line-height: 1;
+    }
+    .timer-circle {
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      border: 3px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: var(--card);
+      box-shadow: 0 8px 32px rgba(0,184,169,0.1);
+    }
+    .timer-presets {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .preset-btn {
+      padding: 8px 18px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--slate);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .preset-btn:hover, .preset-btn.active { background: var(--teal); color: white; border-color: var(--teal); }
+    .timer-controls { display: flex; gap: 12px; }
+    .timer-control-btn {
+      padding: 14px 32px;
+      border-radius: 14px;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .timer-start { background: var(--teal); color: white; }
+    .timer-start:hover { background: var(--teal-dark); }
+    .timer-reset { background: var(--teal-light); color: var(--teal); }
+    .timer-reset:hover { background: var(--border); }
+
+    /* ── LEGEND ── */
+    .legend {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin: 16px 0 8px;
+    }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--slate); }
+    .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+
+    /* ── RESPONSIVE ── */
+    @media (min-width: 640px) {
+      .mission-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+      .mission-card { margin-bottom: 0; }
+    }
+    @media (min-width: 900px) {
+      .workout-layout { display: grid; grid-template-columns: 1fr 340px; gap: 24px; }
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="app-header">
+  <div class="app-logo">MARI<span>THERA</span></div>
+  <div class="header-day" id="headerDay">DAY 1 / 50</div>
+</header>
+
+<!-- NAV -->
+<nav class="nav-tabs">
+  <button class="nav-tab active" onclick="showPage('home')">🏠 홈</button>
+  <button class="nav-tab" onclick="showPage('workout')">🧜 운동</button>
+  <button class="nav-tab" onclick="showPage('calendar')">📅 캘린더</button>
+  <button class="nav-tab" onclick="showPage('timer')">⏱ 타이머</button>
+</nav>
+
+<!-- HOME PAGE -->
+<div class="page active" id="page-home">
+  <div class="hero-card">
+    <div class="hero-badge" id="heroBadge">DAY 1 / 50</div>
+    <div class="hero-title">오늘의 머메이드 루틴</div>
+    <div class="hero-sub">매일 5가지 동작 · 약 15~20분</div>
+    <div class="progress-row">
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="homeProgressFill" style="width:0%"></div>
+      </div>
+      <div class="progress-label" id="homeProgressLabel">0% 완료</div>
+    </div>
+  </div>
+
+  <div class="section-label">연속 달성</div>
+  <div class="streak-row" id="streakRow"></div>
+
+  <div class="section-label">오늘의 미션</div>
+  <div class="mission-list" id="missionList"></div>
+
+  <br>
+  <button class="done-btn" onclick="showPage('calendar')" style="background:var(--navy)">📅 50일 캘린더 보기</button>
+</div>
+
+<!-- WORKOUT PAGE -->
+<div class="page" id="page-workout">
+  <div class="workout-header">
+    <button class="back-btn" onclick="showPage('home')">← 홈으로</button>
+    <div class="workout-title" id="workoutDayLabel">DAY 1</div>
+    <div class="workout-progress-text" id="workoutProgressText">0 / 5 완료</div>
+  </div>
+
+  <div style="height:4px;background:var(--border);border-radius:2px;margin-bottom:16px">
+    <div id="workoutProgressBar" style="height:4px;background:var(--teal);border-radius:2px;width:0%;transition:width 0.4s"></div>
+  </div>
+
+  <div class="move-tabs" id="moveTabs"></div>
+
+  <div class="workout-layout">
+    <div>
+      <div class="move-card" id="moveCard"></div>
+      <button class="timer-btn" onclick="showPage('timer')">⏱ 타이머로 운동하기</button>
+      <div id="doneArea"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CALENDAR PAGE -->
+<div class="page" id="page-calendar">
+  <h2 style="font-family:'Cormorant Garamond',serif;font-size:28px;margin-bottom:6px">50일 챌린지</h2>
+  <p style="color:var(--slate);font-size:13px;margin-bottom:20px" id="calendarSub">Day 1 진행 중</p>
+
+  <div class="calendar-stats">
+    <div class="stat-item"><div class="stat-num" id="statDone">0</div><div class="stat-label">완료</div></div>
+    <div class="stat-item"><div class="stat-num" id="statToday">1</div><div class="stat-label">오늘</div></div>
+    <div class="stat-item"><div class="stat-num" id="statLeft">50</div><div class="stat-label">남음</div></div>
+  </div>
+
+  <div id="calendarGrid"></div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#b0ede8;border:1px solid var(--teal)"></div>완료</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--teal)"></div>오늘</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--teal-light);border:1px solid var(--border)"></div>예정</div>
+  </div>
+</div>
+
+<!-- TIMER PAGE -->
+<div class="page" id="page-timer">
+  <div class="timer-container">
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:24px;margin-bottom:8px">타이머</h2>
+    <p style="color:var(--slate);font-size:13px;margin-bottom:24px">운동 시간을 설정하고 시작하세요</p>
+
+    <div class="timer-presets">
+      <button class="preset-btn" onclick="setTimer(30)">30초</button>
+      <button class="preset-btn" onclick="setTimer(40)">40초</button>
+      <button class="preset-btn active" onclick="setTimer(60)">1분</button>
+      <button class="preset-btn" onclick="setTimer(120)">2분</button>
+      <button class="preset-btn" onclick="setTimer(180)">3분</button>
+      <button class="preset-btn" onclick="setTimer(240)">4분</button>
+    </div>
+
+    <div class="timer-circle">
+      <div class="timer-display" id="timerDisplay">1:00</div>
+    </div>
+
+    <br><br>
+    <div class="timer-controls">
+      <button class="timer-control-btn timer-start" id="timerStartBtn" onclick="toggleTimer()">▶ 시작</button>
+      <button class="timer-control-btn timer-reset" onclick="resetTimer()">↺ 초기화</button>
+    </div>
+  </div>
+</div>
+
+<!-- DAY DETAIL MODAL -->
+<div class="modal-overlay" id="dayModal" onclick="closeDayModal(event)">
+  <div class="modal-card" id="modalCard"></div>
+</div>
+
+<script>
+// ════════════════════════════════
+// 50일 운동 데이터
+// ════════════════════════════════
+const allDayMoves = [
+  // DAY 1
+  [{name:"목 측면 스트레칭",category:"경추 이완",duration:"3분",desc:"귀를 어깨 쪽으로 기울여 반대편 승모근을 늘여요. 좌우 각 40초씩 유지해요.",tip:"어깨가 올라가지 않도록 주의하세요. 어깨를 아래로 내린 채로 목만 기울여요.",tool:null},{name:"턱 당기기",category:"경추 이완",duration:"2분",desc:"벽에 머리를 살짝 대고 턱을 안으로 당기는 동작이에요. 거북목 교정에 효과적이에요.",tip:"고개를 숙이는 게 아니라 턱을 뒤로 밀어넣는 느낌이에요.",tool:null},{name:"어깨 풀기",category:"전신 이완",duration:"2분",desc:"앞뒤 번갈아 크게 돌려요. 팔꿈치 구부려도 괜찮아요.",tip:"최대한 크게 원을 그리듯이 돌려요. 속도는 천천히.",tool:null},{name:"발목 돌리기",category:"전신 이완",duration:"2분",desc:"앉거나 서서 발목을 시계 방향, 반시계 방향으로 각 10회씩 크게 돌려요.",tip:"종아리가 뻐근하다면 발목을 더 천천히 돌려요.",tool:null},{name:"복식호흡",category:"쿨다운",duration:"3분",desc:"편안히 누워 배에 손을 올리고 숨을 들이쉴 때 배가 올라오도록 해요. 4초 들이쉬고 6초 내쉬어요.",tip:"가슴이 아닌 배로 호흡하는 느낌에 집중해요.",tool:null}],
+  // DAY 2
+  [{name:"목 반원 움직임",category:"경추 이완",duration:"2분",desc:"좌→앞→우 방향으로 천천히 반원을 그려요. 뒤로 꺾지 않아요.",tip:"오늘은 반원으로만 해요. 뒤로 꺾으면 경추 압박이 생길 수 있어요.",tool:null},{name:"가슴 열기",category:"흉추 이완",duration:"2분",desc:"등 뒤에서 손깍지를 끼고 가슴을 앞으로 열어요. 10초 유지 후 3회 반복해요.",tip:"턱을 살짝 들고 시선을 위를 향해요.",tool:null},{name:"옆구리 스트레칭",category:"측면 이완",duration:"3분",desc:"서서 한 팔을 머리 위로 들어 반대쪽으로 기울여요. 좌우 각 40초씩 유지해요.",tip:"골반이 옆으로 빠지지 않도록 발을 어깨 너비로 유지해요.",tool:null},{name:"무릎 당겨 눕기",category:"허리 이완",duration:"2분",desc:"바닥에 누워 양 무릎을 가슴으로 당겨요. 좌우로 살살 흔들어요.",tip:"허리가 시원하게 늘어나는 느낌을 느껴요.",tool:null},{name:"시체 자세",category:"쿨다운",duration:"3분",desc:"바닥에 편안히 누워 팔과 다리를 자연스럽게 벌려요. 온몸의 힘을 빼고 호흡에만 집중해요.",tip:"눈을 감고 몸이 바닥으로 가라앉는 느낌을 느껴요.",tool:null}],
+  // DAY 3
+  [{name:"골반 기울이기",category:"고관절 준비",duration:"2분",desc:"바닥에 누워 무릎을 세워요. 허리를 바닥에 지그시 눌렀다가 떼는 동작을 반복해요.",tip:"크게 움직이지 않아도 괜찮아요. 작은 움직임으로 복부와 허리를 느껴요.",tool:null},{name:"나비 자세",category:"고관절 이완",duration:"3분",desc:"앉아서 발바닥을 맞대고 무릎을 양옆으로 떨어뜨려요. 상체를 앞으로 천천히 숙여요.",tip:"무릎을 억지로 바닥에 누르지 말고 자연스럽게 중력에 맡겨요.",tool:null},{name:"누워서 4자 스트레칭",category:"고관절 이완",duration:"3분",desc:"바닥에 누워 한쪽 발목을 반대쪽 무릎 위에 올려요. 그 상태로 무릎을 가슴 쪽으로 당겨요.",tip:"골반이 틀어지지 않도록 허리를 바닥에 붙여요.",tool:null},{name:"골반 시계 돌리기",category:"고관절 가동성",duration:"2분",desc:"서서 손을 허리에 올리고 골반을 시계 방향, 반시계 방향으로 크게 원을 그리며 돌려요.",tip:"상체는 최대한 고정하고 골반만 움직여요.",tool:null},{name:"아기 자세",category:"쿨다운",duration:"2분",desc:"무릎을 꿇고 엉덩이를 발뒤꿈치에 붙이며 팔을 앞으로 뻗어요. 등 전체가 늘어나는 느낌을 느껴요.",tip:"이마를 바닥에 편안히 내려놓고 호흡을 느껴요.",tool:null}],
+  // DAY 4
+  [{name:"캣카우 자세",category:"척추 이완",duration:"3분",desc:"네발 기기 자세에서 숨을 들이쉬며 등을 아래로 내리고, 내쉬며 등을 둥글게 말아요.",tip:"움직임을 천천히 하고 척추 마디마디를 느끼며 움직여요.",tool:null},{name:"누워서 척추 비틀기",category:"척추 이완",duration:"3분",desc:"바닥에 누워 한쪽 무릎을 반대편으로 넘기며 척추를 비틀어요. 양어깨는 바닥에 붙여요. 좌우 각 45초씩 유지해요.",tip:"억지로 무릎을 바닥에 붙이려 하지 말고 자연스럽게 중력에 맡겨요.",tool:null},{name:"앉아서 전굴",category:"허리·햄스트링 이완",duration:"2분",desc:"바닥에 다리를 펴고 앉아 상체를 천천히 앞으로 숙여요. 발끝 방향으로 손을 뻗어요.",tip:"무릎을 억지로 펴지 말고 골반이 앞으로 기울도록 해요.",tool:null},{name:"발바닥 굴리기",category:"족저 이완",duration:"2분",desc:"서서 또는 앉아서 발 아치 부분을 마사지볼로 천천히 굴려요.",tip:"뭉친 느낌이 드는 곳에서 30초 정도 머물러요.",tool:"마사지볼"},{name:"복식호흡",category:"쿨다운",duration:"2분",desc:"편안히 누워 배에 손을 올리고 숨을 들이쉴 때 배가 올라오도록 해요.",tip:"가슴이 아닌 배로 호흡하는 느낌에 집중해요.",tool:null}],
+  // DAY 5
+  [{name:"서서 햄스트링 스트레칭",category:"하체 이완",duration:"3분",desc:"한 발을 앞으로 내밀고 발뒤꿈치를 바닥에 대요. 상체를 앞으로 숙이며 햄스트링을 늘여요. 좌우 각 40초씩 해요.",tip:"무릎을 살짝 구부려도 괜찮아요.",tool:null},{name:"앉아서 비둘기 준비 자세",category:"고관절 이완",duration:"3분",desc:"의자에 앉아 한쪽 발목을 반대쪽 무릎 위에 올려요. 상체를 천천히 앞으로 숙여요.",tip:"등을 곧게 유지하며 고관절이 열리는 느낌에 집중해요.",tool:null},{name:"종아리 스트레칭",category:"하체 이완",duration:"2분",desc:"벽에 손을 대고 한 발을 뒤로 물러나 뒤꿈치를 바닥에 붙여요. 앞 무릎을 구부리며 종아리를 늘여요.",tip:"뒤쪽 다리의 무릎이 구부러지지 않도록 해요.",tool:null},{name:"대퇴사두근 스트레칭",category:"하체 이완",duration:"2분",desc:"서서 한쪽 발목을 뒤로 잡아 엉덩이 쪽으로 당겨요. 균형이 어렵다면 벽을 짚어요.",tip:"무릎이 앞으로 나오지 않도록 무릎을 모아요.",tool:null},{name:"누워서 무릎 좌우 떨어뜨리기",category:"쿨다운",duration:"2분",desc:"바닥에 누워 무릎을 세운 후 좌우로 천천히 떨어뜨려요. 허리 회전을 느껴요.",tip:"양쪽 어깨는 바닥에 붙인 채로 해요.",tool:null}],
+  // DAY 6
+  [{name:"팔 앞뒤 스윙",category:"어깨 이완",duration:"2분",desc:"팔을 자연스럽게 앞뒤로 흔들어요. 어깨 관절이 풀리는 느낌을 느껴요.",tip:"힘을 빼고 중력에 맡겨 흔들어요.",tool:null},{name:"목 전후 스트레칭",category:"경추 이완",duration:"2분",desc:"천천히 고개를 앞으로 숙여 뒷목을 늘이고, 다시 원위치로 돌아와요. 10회 반복해요.",tip:"뒤로 꺾지 않아요. 앞으로만 숙여요.",tool:null},{name:"가슴 앞 팔 교차",category:"어깨 이완",duration:"2분",desc:"한쪽 팔을 가슴 앞으로 뻗고 반대 손으로 당겨 어깨를 늘여요. 좌우 각 30초씩 유지해요.",tip:"어깨가 올라가지 않도록 내려요.",tool:null},{name:"등 위쪽 스트레칭",category:"흉추 이완",duration:"2분",desc:"양손을 앞으로 모아 깍지를 끼고 등을 둥글게 말아요. 견갑골 사이가 벌어지는 느낌을 느껴요.",tip:"호흡을 내쉬며 더 깊게 늘여요.",tool:null},{name:"아기 자세",category:"쿨다운",duration:"3분",desc:"무릎을 꿇고 엉덩이를 발뒤꿈치에 붙이며 팔을 앞으로 뻗어요.",tip:"호흡을 깊게 하며 등 전체를 이완해요.",tool:null}],
+  // DAY 7
+  [{name:"전신 스트레칭",category:"전신 이완",duration:"2분",desc:"바닥에 누워 팔을 머리 위로 뻗고 발끝을 당겨 온몸을 길게 늘여요.",tip:"호흡을 들이쉬며 늘이고 내쉬며 이완해요.",tool:null},{name:"다운독",category:"전신 스트레칭",duration:"2분",desc:"엎드린 자세에서 엉덩이를 천장으로 들어올려 역V자 모양을 만들어요.",tip:"무릎을 살짝 구부려도 괜찮아요.",tool:null},{name:"캣카우 자세",category:"척추 이완",duration:"2분",desc:"네발 기기 자세에서 숨을 들이쉬며 등을 내리고 내쉬며 등을 말아요.",tip:"천천히 리듬감 있게 반복해요.",tool:null},{name:"나비 자세",category:"고관절 이완",duration:"2분",desc:"앉아서 발바닥을 맞대고 무릎을 양옆으로 떨어뜨려요.",tip:"자연스럽게 중력에 맡겨요.",tool:null},{name:"시체 자세",category:"쿨다운",duration:"3분",desc:"바닥에 편안히 누워 팔과 다리를 자연스럽게 벌려요.",tip:"눈을 감고 몸이 바닥으로 가라앉는 느낌을 느껴요.",tool:null}],
+  // DAY 8
+  [{name:"횡격막 호흡",category:"호흡 훈련",duration:"3분",desc:"한 손은 가슴, 한 손은 배에 올려요. 숨을 들이쉴 때 배만 올라오도록 연습해요.",tip:"코로 4초 들이쉬고 입으로 8초 내쉬어요.",tool:null},{name:"옆구리 스트레칭",category:"측면 이완",duration:"2분",desc:"서서 한 팔을 머리 위로 들어 반대쪽으로 기울여요. 좌우 각 40초씩 유지해요.",tip:"골반이 옆으로 빠지지 않도록 해요.",tool:null},{name:"누워서 척추 비틀기",category:"척추 이완",duration:"3분",desc:"바닥에 누워 한쪽 무릎을 반대편으로 넘기며 척추를 비틀어요. 좌우 각 45초씩 유지해요.",tip:"양쪽 어깨는 바닥에 붙인 채로 해요.",tool:null},{name:"발바닥 굴리기",category:"족저 이완",duration:"2분",desc:"서서 또는 앉아서 발 아치 부분을 마사지볼로 천천히 굴려요.",tip:"뭉친 느낌이 드는 곳에서 30초 정도 머물러요.",tool:"마사지볼"},{name:"복식호흡",category:"쿨다운",duration:"2분",desc:"편안히 누워 배에 손을 올리고 숨을 들이쉴 때 배가 올라오도록 해요.",tip:"가슴이 아닌 배로 호흡하는 느낌에 집중해요.",tool:null}],
+  // DAY 9
+  [{name:"제자리 걷기",category:"워밍업",duration:"2분",desc:"제자리에서 무릎을 번갈아 높이 들며 걸어요.",tip:"무릎을 배꼽 높이까지 들어요.",tool:null},{name:"골반 기울이기",category:"코어 인식",duration:"2분",desc:"바닥에 누워 무릎을 세워요. 허리를 바닥에 지그시 눌렀다가 떼는 동작을 반복해요.",tip:"작은 움직임으로 복부와 허리를 느껴요.",tool:null},{name:"어깨 으쓱 올리기",category:"승모근 이완",duration:"2분",desc:"어깨를 귀 쪽으로 최대한 올렸다가 갑자기 힘을 빼며 떨어뜨려요. 10회 반복해요.",tip:"떨어뜨릴 때 어깨에 힘이 빠지는 느낌을 느껴요.",tool:null},{name:"무릎 당겨 눕기",category:"허리 이완",duration:"2분",desc:"바닥에 누워 양 무릎을 가슴으로 당겨요. 좌우로 살살 흔들어요.",tip:"허리가 시원하게 늘어나는 느낌을 느껴요.",tool:null},{name:"아기 자세",category:"쿨다운",duration:"3분",desc:"무릎을 꿇고 엉덩이를 발뒤꿈치에 붙이며 팔을 앞으로 뻗어요.",tip:"호흡을 깊게 하며 등 전체를 이완해요.",tool:null}],
+  // DAY 10
+  [{name:"전신 스트레칭",category:"전신 이완",duration:"2분",desc:"바닥에 누워 팔을 머리 위로 뻗고 발끝을 당겨 온몸을 길게 늘여요.",tip:"호흡을 들이쉬며 늘이고 내쉬며 이완해요.",tool:null},{name:"캣카우 자세",category:"척추 이완",duration:"2분",desc:"네발 기기 자세에서 숨을 들이쉬며 등을 내리고 내쉬며 등을 말아요.",tip:"천천히 리듬감 있게 반복해요.",tool:null},{name:"나비 자세",category:"고관절 이완",duration:"3분",desc:"앉아서 발바닥을 맞대고 무릎을 양옆으로 떨어뜨려요.",tip:"자연스럽게 중력에 맡겨요.",tool:null},{name:"누워서 4자 스트레칭",category:"고관절 이완",duration:"3분",desc:"바닥에 누워 한쪽 발목을 반대쪽 무릎 위에 올려요.",tip:"골반이 틀어지지 않도록 허리를 바닥에 붙여요.",tool:null},{name:"시체 자세",category:"쿨다운",duration:"3분",desc:"바닥에 편안히 누워 팔과 다리를 자연스럽게 벌려요.",tip:"눈을 감고 몸이 바닥으로 가라앉는 느낌을 느껴요.",tool:null}],
+  // DAY 11
+  [{name:"무릎 꿇고 런지 스트레칭",category:"장요근 이완",duration:"4분",desc:"한쪽 무릎을 바닥에 대고 반대쪽 발을 앞으로 내밀어요. 골반을 앞으로 밀며 장요근을 늘여요. 좌우 각 1분씩 유지해요.",tip:"허리를 과도하게 젖히지 말고 골반을 앞으로 밀어내는 느낌에 집중해요.",tool:null},{name:"누워서 무릎 당기기",category:"장요근 이완",duration:"3분",desc:"바닥에 누워 한쪽 무릎을 가슴 쪽으로 당겨요. 반대쪽 다리는 바닥에 편평하게 유지해요.",tip:"반대쪽 다리가 바닥에서 뜨지 않도록 주의해요.",tool:null},{name:"골반 기울이기",category:"장요근 준비",duration:"2분",desc:"바닥에 누워 무릎을 세워요. 허리를 바닥에 지그시 눌렀다가 떼는 동작을 반복해요.",tip:"크게 움직이지 않아도 괜찮아요.",tool:null},{name:"캣카우 자세",category:"척추 이완",duration:"2분",desc:"네발 기기 자세에서 숨을 들이쉬며 등을 내리고 내쉬며 등을 말아요.",tip:"천천히 리듬감 있게 반복해요.",tool:null},{name:"엎드려 호흡",category:"쿨다운",duration:"2분",desc:"엎드려서 이마를 손등 위에 올리고 복식호흡을 해요.",tip:"호흡에만 집중해요.",tool:null}],
+  // DAY 12
+  [{name:"비둘기 자세",category:"장요근·고관절 이완",duration:"4분",desc:"한쪽 다리를 앞으로 접고 반대 다리를 뒤로 뻗어요. 상체를 앞으로 숙여 고관절을 깊게 이완해요. 좌우 각 1분씩 유지해요.",tip:"엉덩이가 한쪽으로 기울지 않도록 해요.",tool:null},{name:"무릎 꿇고 런지 스트레칭",category:"장요근 이완",duration:"3분",desc:"한쪽 무릎을 바닥에 대고 반대쪽 발을 앞으로 내밀어요. 좌우 각 45초씩 유지해요.",tip:"골반을 앞으로 밀어내는 느낌에 집중해요.",tool:null},{name:"골반 시계 돌리기",category:"고관절 가동성",duration:"2분",desc:"서서 손을 허리에 올리고 골반을 크게 돌려요.",tip:"상체는 고정하고 골반만 움직여요.",tool:null},{name:"누워서 척추 비틀기",category:"척추 이완",duration:"2분",desc:"바닥에 누워 한쪽 무릎을 반대편으로 넘기며 척추를 비틀어요.",tip:"양쪽 어깨는 바닥에 붙인 채로 해요.",tool:null},{name:"아기 자세",category:"쿨다운",duration:"2분",desc:"무릎을 꿇고 엉덩이를 발뒤꿈치에 붙이며 팔을 앞으로 뻗어요.",tip:"호흡을 깊게 하며 등 전체를 이완해요.",tool:null}],
+  // DAY 13
+  [{name:"서서 무릎 들기",category:"장요근 활성화",duration:"3분",desc:"서서 한쪽 무릎을 배꼽 높이까지 들어올려요. 3초 유지 후 내려요. 좌우 각 10회씩 해요.",tip:"허리가 뒤로 젖혀지지 않도록 복부에 힘을 주어요.",tool:null},{name:"무릎 꿇고 런지 스트레칭",category:"장요근 이완",duration:"3분",desc:"한쪽 무릎을 바닥에 대고 반대쪽 발을 앞으로 내밀어요. 좌우 각 45초씩 유지해요.",tip:"골반을 앞으로 밀어내는 느낌에 집중해요.",tool:null},{name:"누워서 다리 들기",category:"장요근 활성화",duration:"2분",desc:"바닥에 누워 한쪽 다리를 쭉 펴서 45도까지 들어올려요. 3초 유지 후 내려요. 좌우 각 10회씩 해요.",tip:"허리가 바닥에서 뜨지 않도록 복부에 힘을 주어요.",tool:null},{name:"캣카우 자세",category:"척추 이완",duration:"2분",desc:"네발 기기 자세에서 숨을 들이쉬며 등을 내리고 내쉬며 등을 말아요.",tip:"천천히 리듬감 있게 반복해요.",tool:null},{name:"복식호흡",category:"쿨다운",duration:"2분",desc:"편안히 누워 배에 손을 올리고 숨을 들이쉴 때 배가 올라오도록 해요.",tip:"가슴이 아닌 배로 호흡하는 느낌에 집중해요.",tool:null}],
+  // DAY 14
+  [{name:"워리어 1 자세",category:"장요근 강화·이완",duration:"4분",desc:"한 발을 크게 앞으로 내딛고 뒤꿈치를 바닥에 붙여요. 양팔을 머리 위로 들어올리며 골반을 앞으로 밀어요. 좌우 각 1분씩 유지해요.",tip:"뒤쪽 다리 허벅지 앞 장요근이 당기는 느낌에 집중해요.",tool:null},{name:"서서 무릎 들기",category:"장요근 활성화",duration:"2분",desc:"서서 한쪽 무릎을 배꼽 높이까지 들어올려요. 3초 유지 후 내려요. 좌우 각 10회씩 해요.",tip:"허리가 뒤로 젖혀지지 않도록 복부에 힘을 주어요.",tool:null},{name:"비둘기 자세",category:"장요근·고관절 이완",duration:"3분",desc:"한쪽 다리를 앞으로 접고 반대 다리를 뒤로 뻗어요. 좌우 각 45초씩 유지해요.",tip:"엉덩이가 한쪽으로 기울지 않도록 해요.",tool:null},{name:"누워서 무릎 당기기",category:"장요근 이완",duration:"2분",desc:"바닥에 누워 한쪽 무릎을 가슴 쪽으로 당겨요. 좌우 각 45초씩 해요.",tip:"반대쪽 다리가 바닥에서 뜨지 않도록 해요.",tool:null},{name:"시체 자세",category:"쿨다운",duration:"2분",desc:"바닥에 편안히 누워 팔과 다리를 자연스럽게 벌려요.",tip:"눈을 감고 몸이 바닥으로 가라앉는 느낌을 느껴요.",tool:null}],
+  // DAY 15
+  [{name:"낮은 런지 + 비틀기",category:"장요근·척추 이완",duration:"4분",desc:"무릎 꿇고 런지 자세에서 앞쪽 발 쪽으로 상체를 비틀어요. 팔을 하늘 방향으로 들어올려요. 좌우 각 1분씩 해요.",tip:"골반은 정면을 향하게 유지하고 척추를 길게 늘인 채로 비틀어요.",tool:null},{name:"서서 무릎 들기",category:"장요근 활성화",duration:"2분",desc:"서서 한쪽 무릎을 배꼽 높이까지 들어올려요. 좌우 각 10회씩 해요.",tip:"허리가 뒤로 젖혀지지 않도록 복부에 힘을 주어요.",tool:null},{name:"골반 기울이기",category:"장요근 준비",duration:"2분",desc:"바닥에 누워 무릎을 세워요. 허리를 바닥에 지그시 눌렀다가 떼는 동작을 반복해요.",tip:"크게 움직이지 않아도 괜찮아요.",tool:null},{name:"누워서 다리 들기",category:"장요근 활성화",duration:"2분",desc:"바닥에 누워 한쪽 다리를 쭉 펴서 45도까지 들어올려요. 좌우 각 10회씩 해요.",tip:"허리가 바닥에서 뜨지 않도록 복부에 힘을 주어요.",tool:null},{name:"아기 자세",category:"쿨다운",duration:"2분",desc:"무릎을 꿇고 엉덩이를 발뒤꿈치에 붙이며 팔을 앞으로 뻗어요.",tip:"호흡을 깊게 하며 등 전체를 이완해요.",tool:null}],
+  // DAY 16~50 (간소화된 데이터)
+  [{name:"스텝 무릎 들기",category:"장요근 지구력",duration:"3분",desc:"서서 좌우 번갈아 무릎을 계속 들어올려요. 리듬감 있게 1분씩 3세트 해요.",tip:"허리가 뒤로 젖혀지지 않도록 복부에 힘을 주어요.",tool:null},{name:"워리어 1 자세",category:"장요근 강화",duration:"3분",desc:"한 발을 크게 앞으로 내딛고 양팔을 머리 위로 들어올려요. 좌우 각 45초씩 유지해요.",tip:"뒤쪽 다리 허벅지 앞 장요근이 당기는 느낌에 집중해요.",tool:null},{name:"무릎 꿇고 런지 스트레칭",category:"장요근 이완",duration:"2분",desc:"한쪽 무릎을 바닥에 대고 반대쪽 발을 앞으로 내밀어요. 좌우 각 30초씩 유지해요.",tip:"골반을 앞으로 밀어내는 느낌에 집중해요.",tool:null},{name:"비둘기 자세",category:"장요근·고관절 이완",duration:"2분",desc:"한쪽 다리를 앞으로 접고 반대 다리를 뒤로 뻗어요. 좌우 각 30초씩 유지해요.",tip:"엉덩이가 한쪽으로 기울지 않도록 해요.",tool:null},{name:"복식호흡",category:"쿨다운",duration:"2분",desc:"편안히 누워 배에 손을 올리고 숨을 들이쉴 때 배가 올라오도록 해요.",tip:"가슴이 아닌 배로 호흡하는 느낌에 집중해요.",tool:null}],
+  [{name:"브릿지 변형 (한발)",category:"장요근·둔근 협응",duration:"3분",desc:"일반 브릿지 자세에서 한쪽 다리를 펴서 들어올려요. 골반이 기울지 않도록 유지해요. 좌우 각 30초씩 해요.",tip:"처음엔 무릎만 살짝 들어올리는 정도로 시작해도 괜찮아요.",tool:null},{name:"낮은 런지 + 비틀기",category:"장요근·척추 이완",duration:"3분",desc:"무릎 꿇고 런지 자세에서 앞쪽 발 쪽으로 상체를 비틀어요. 좌우 각 45초씩 해요.",tip:"골반은 정면을 향하게 유지해요.",tool:null},{name:"서서 무릎 들기",category:"장요근 활성화",duration:"2분",desc:"서서 한쪽 무릎을 배꼽 높이까지 들어올려요. 좌우 각 15회씩 해요.",tip:"허리가 뒤로 젖혀지지 않도록 복부에 힘을 주어요.",tool:null},{name:"누워서 다리 들기",category:"장요근 강화",duration:"2분",desc:"바닥에 누워 한쪽 다리를 쭉 펴서 45도까지 들어올려요. 좌우 각 15회씩 해요.",tip:"허리가 바닥에서 뜨지 않도록 복부에 힘을 주어요.",tool:null},{name:"아기 자세",category:"쿨다운",duration:"2분",desc:"무릎을 꿇고 엉덩이를 발뒤꿈치에 붙이며 팔을 앞으로 뻗어요.",tip:"호흡을 깊게 하며 등 전체를 이완해요.",tool:null}],
+  [{name:"비둘기 자세",category:"장요근·고관절 이완",duration:"5분",desc:"한쪽 다리를 앞으로 접고 반대 다리를 뒤로 뻗어요. 좌우 각 1분 30초씩 유지해요.",tip:"엉덩이가 한쪽으로 기울지 않도록 해요.",tool:null},{name:"무릎 꿇고 런지 스트레칭",category:"장요근 이완",duration:"3분",desc:"한쪽 무릎을 바닥에 대고 반대쪽 발을 앞으로 내밀어요. 좌우 각 45초씩 유지해요.",tip:"골반을 앞으로 밀어내는 느낌에 집중해요.",tool:null},{name:"누워서 척추 비틀기",category:"척추 이완",duration:"3분",desc:"바닥에 누워 한쪽 무릎을 반대편으로 넘기며 척추를 비틀어요. 좌우 각 45초씩 유지해요.",tip:"양쪽 어깨는 바닥에 붙인 채로 해요.",tool:null},{name:"캣카우 자세",category:"척추 이완",duration:"2분",desc:"네발 기기 자세에서 숨을 들이쉬며 등을 내리고 내쉬며 등을 말아요.",tip:"천천히 리듬감 있게 반복해요.",tool:null},{name:"시체 자세",category:"쿨다운",duration:"3분",desc:"바닥에 편안히 누워 팔과 다리를 자연스럽게 벌려요.",tip:"눈을 감고 몸이 바닥으로 가라앉는 느낌을 느껴요.",tool:null}],
+  [{name:"워리어 1 자세",category:"장요근 강화",duration:"4분",desc:"한 발을 크게 앞으로 내딛고 양팔을 머리 위로 들어올려요. 좌우 각 1분씩 유지해요.",tip:"뒤쪽 다리 허벅지 앞 장요근이 당기는 느낌에 집중해요.",tool:null},{name:"스텝 무릎 들기",category:"장요근 지구력",duration:"2분",desc:"서서 좌우 번갈아 무릎을 계속 들어올려요. 2분간 해요.",tip:"허리가 뒤로 젖혀지지 않도록 복부에 힘을 주어요.",tool:null},{name:"브릿지 변형 (한발)",category:"장요근·둔근 협응",duration:"2분",desc:"일반 브릿지 자세에서 한쪽 다리를 펴서 들어올려요. 좌우 각 30초씩 해요.",tip:"골반이 기울지 않도록 유지해요.",tool:null},{name:"비둘기 자세",category:"장요근 이완",duration:"3분",desc:"한쪽 다리를 앞으로 접고 반대 다리를 뒤로 뻗어요. 좌우 각 45초씩 유지해요.",tip:"엉덩이가 한쪽으로 기울지 않도록 해요.",tool:null},{name:"복식호흡",category:"쿨다운",duration:"2분",desc:"편안히 누워 배에 손을 올리고 숨을 들이쉴 때 배가 올라오도록 해요.",tip:"가슴이 아닌 배로 호흡하는 느낌에 집중해요.",tool:null}],
+  [{name:"무릎 꿇고 런지 스트레칭",category:"장요근 이완",duration:"3분",desc:"한쪽 무릎을 바닥에 대고 반대쪽 발을 앞으로 내밀어요. 좌우 각 45초씩 유지해요.",tip:"골반을 앞으로 밀어내는 느낌에 집중해요.",tool:null},{name:"워리어 1 자세",category:"장요근 강화",duration:"3분",desc:"한 발을 크게 앞으로 내딛고 양팔을 머리 위로 들어올려요. 좌우 각 45초씩 유지해요.",tip:"뒤쪽 다리 허벅지 앞 장요근이 당기는 느낌에 집중해요.",tool:null},{name:"서서 무릎 들기",category:"장요근 활성화",duration:"2분",desc:"서서 한쪽 무릎을 배꼽 높이까지 들어올려요. 좌우 각 15회씩 해요.",tip:"허리가 뒤로 젖혀지지 않도록 복부에 힘을 주어요.",tool:null},{name:"비둘기 자세",category:"장요근·고관절 이완",duration:"3분",desc:"한쪽 다리를 앞으로 접고 반대 다리를 뒤로 뻗어요. 좌우 각 45초씩 유지해요.",tip:"엉덩이가 한쪽으로 기울지 않도록 해요.",tool:null},{name:"시체 자세",category:"쿨다운",duration:"2분",desc:"바닥에 편안히 누워 팔과 다리를 자연스럽게 벌려요.",tip:"눈을 감고 몸이 바닥으로 가라앉는 느낌을 느껴요.",tool:null}],
+  [{name:"버드독",category:"다열근 강화",duration:"3분",desc:"네발 기기 자세에서 오른팔과 왼다리를 동시에 들어 펴요. 5초 유지 후 반대쪽 반복해요.",tip:"허리가 흔들리지 않도록 코어에 힘을 주고 시선은 바닥을 봐요.",tool:null},{name:"슈퍼맨 자세",category:"다열근 강화",duration:"2분",desc:"엎드린 자세에서 팔과 다리를 동시에 들어올려요. 3초 유지 후 내려요.",tip:"목을 과도하게 들지 말고 척추와 일직선을 유지해요.",tool:null},{name:"캣카우 자세",category:"다열근 활성화",duration:"2분",desc:"네발 기기 자세에서 숨을 들이쉬며 등을 내리고 내쉬며 등을 말아요.",tip:"천천히 리듬감 있게 반복해요.",tool:null},{name:"골반 기울이기",category:"다열근 준비",duration:"2분",desc:"바닥에 누워 무릎을 세워요. 허리를 바닥에 지그시 눌렀다가 떼는 동작을 반복해요.",tip:"작은 움직임으로 복부와 허리를 느껴요.",tool:null},{name:"아기 자세",category:"쿨다운",duration:"2분",desc:"무릎을 꿇고 엉덩이를 발뒤꿈치에 붙이며 팔을 앞으로 뻗어요.",tip:"호흡을 깊게 하며 등 전체를 이완해요.",tool:null}],
+  [{name:"플랭크",category:"다열근·코어 강화",duration:"3분",desc:"팔꿈치를 바닥에 대고 발끝으로 버티는 자세예요. 20~30초씩 반복해요.",tip:"배꼽을 척추 쪽으로 당기는 느낌이에요.",tool:null},{name:"버드독",category:"다열근 강화",duration:"3분",desc:"네발 기기 자세에서 오른팔과 왼다리를 동시에 들어 펴요. 5초 유지 후 반대쪽 반복해요.",tip:"허리가 흔들리지 않도록 코어에 힘을 주어요.",tool:null},{name:"브릿지",category:"다열근·둔근 강화",duration:"3분",desc:"바닥에 누워 무릎을 세우고 엉덩이를 천장 방향으로 들어올려요.",tip:"엉덩이를 꽉 쥐는 느낌으로 올려요.",tool:null},{name:"캣카우 자세",category:"척추 이완",duration:"2분",desc:"네발 기기 자세에서 숨을 들이쉬며 등을 내리고 내쉬며 등을 말아요.",tip:"천천히 리듬감 있게 반복해요.",tool:null},{name:"엎드려 호흡",category:"쿨다운",duration:"2분",desc:"엎드려서 이마를 손등 위에 올리고 복식호흡을 해요.",tip:"호흡에만 집중해요.",tool:null}],
+  [{name:"데드버그",category:"다열근·코어 강화",duration:"3분",desc:"바닥에 누워 팔을 천장으로 들고 무릎을 90도로 세워요. 오른팔과 왼다리를 동시에 바닥 방향으로 내렸다가 올려요.",tip:"허리가 바닥에서 뜨지 않도록 주의해요.",tool:null},{name:"슈퍼맨 자세",category:"다열근 강화",duration:"2분",desc:"엎드린 자세에서 팔과 다리를 동시에 들어올려요. 3초 유지 후 내려요.",tip:"목을 과도하게 들지 말고 척추와 일직선을 유지해요.",tool:null},{name:"사이드 플랭크",category:"측면 코어 강화",duration:"3분",desc:"옆으로 누워 한쪽 팔꿈치로 몸을 지지해요. 엉덩이를 들어 몸이 일직선이 되도록 해요. 좌우 각 20초씩 반복해요.",tip:"처음엔 무릎을 바닥에 대고 해도 괜찮아요.",tool:null},{name:"버드독",category:"다열근 강화",duration:"2분",desc:"네발 기기 자세에서 오른팔과 왼다리를 동시에 들어 펴요. 5초 유지 후 반대쪽 반복해요.",tip:"허리가 흔들리지 않도록 코어에 힘을 주어요.",tool:null},{name:"아기 자세",category:"쿨다운",duration:"2분",desc:"무릎을 꿇고 엉덩이를 발뒤꿈치에 붙이며 팔을 앞으로 뻗어요.",tip:"호흡을 깊게 하며 등 전체를 이완해요.",tool:null}],
+  [{name:"플랭크",category:"코어 강화",duration:"3분",desc:"팔꿈치를 바닥에 대고 발끝으로 버티는 자세예요. 20~30초씩 반복해요.",tip:"배꼽을 척추 쪽으로 당기는 느낌이에요.",tool:null},{name:"데드버그",category:"다열근·코어 강화",duration:"3분",desc:"바닥에 누워 팔을 천장으로 들고 무릎을 90도로 세워요. 오른팔과 왼다리를 동시에 바닥 방향으로 내렸다가 올려요.",tip:"허리가 바닥에서 뜨지 않도록 주의해요.",tool:null},{name:"브릿지",category:"다열근·둔근 강화",duration:"2분",desc:"바닥에 누워 무릎을 세우고 엉덩이를 천장 방향으로 들어올려요.",tip:"엉덩이를 꽉 쥐는 느낌으로 올려요.",tool:null},{name:"캣카우 자세",category:"척추 이완",duration:"2분",desc:"네발 기기 자세에서 숨을 들이쉬며 등을 내리고 내쉬며 등을 말아요.",tip:"천천히 리듬감 있게 반복해요.",tool:null},{name:"복식호흡",category:"쿨다운",duration:"2분",desc:"편안히 누워 배에 손을 올리고 숨을 들이쉴 때 배가 올라오도록 해요.",tip:"가슴이 아닌 배로 호흡하는 느낌에 집중해요.",tool:null}],
+  [{name:"엎드려 호흡",category:"다열근 인식",duration:"3분",desc:"엎드려서 이마를 손등 위에 올리고 복식호흡을 해요.",tip:"호흡에만 집중해요.",tool:null},{name:"캣카우 자세",category:"다열근 활성화",duration:"3분",desc:"네발 기기 자세에서 숨을 들이쉬며 등을 내리고 내쉬며 등을 말아요.",tip:"천천히 리듬감 있게 반복해요.",tool:null},{name:"버드독",category:"다열근 강화",duration:"3분",desc:"네발 기기 자세에서 오른팔과 왼다리를 동시에 들어 펴요. 5초 유지 후 반대쪽 반복해요.",tip:"허리가 흔들리지 않도록 코어에 힘을 주어요.",tool:null},{name:"누워서 척추 비틀기",category:"척추 이완",duration:"2분",desc:"바닥에 누워 한쪽 무릎을 반대편으로 넘기며 척추를 비틀어요.",tip:"양쪽 어깨는 바닥에 붙인 채로 해요.",tool:null},{name:"시체 자세",category:"쿨다운",duration:"3분",desc:"바닥에 편안히 누워 팔과 다리를 자연스럽게 벌려요.",tip:"눈을 감고 몸이 바닥으로 가라앉는 느낌을 느껴요.",tool:null}],
+  [{name:"플랭크 (시간 늘리기)",category:"코어·다열근 강화",duration:"3분",desc:"팔꿈치를 바닥에 대고 발끝으로 버티는 자세예요. 30~40초씩 3세트 해요.",tip:"배꼽을 척추 쪽으로 당기는 느낌이에요.",tool:null},{name:"슈퍼맨 자세",category:"다열근 강화",duration:"2분",desc:"엎드린 자세에서 팔과 다리를 동시에 들어올려요. 5초 유지 후 내려요.",tip:"목을 과도하게 들지 말고 척추와 일직선을 유지해요.",tool:null},{name:"사이드 플랭크",category:"측면 코어 강화",duration:"3분",desc:"옆으로 누워 한쪽 팔꿈치로 몸을 지지해요. 좌우 각 30초씩 반복해요.",tip:"처음엔 무릎을 바닥에 대고 해도 괜찮아요.",tool:null},{name:"데드버그",category:"다열근·코어 강화",duration:"2분",desc:"바닥에 누워 팔을 천장으로 들고 무릎을 90도로 세워요. 오른팔과 왼다리를 동시에 바닥 방향으로 내렸다가 올려요.",tip:"허리가 바닥에서 뜨지 않도록 주의해요.",tool:null},{name:"아기 자세",category:"쿨다운",duration:"2분",desc:"무릎을 꿇고 엉덩이를 발뒤꿈치에 붙이며 팔을 앞으로 뻗어요.",tip:"호흡을 깊게 하며 등 전체를 이완해요.",tool:null}],
+  [{name:"버드독 (유지 시간 늘리기)",category:"다열근 강화",duration:"3분",desc:"네발 기기 자세에서 오른팔과 왼다리를 동시에 들어 펴요. 8초 유지 후 반대쪽 반복해요.",tip:"허리가 흔들리지 않도록 코어에 힘을 주어요.",tool:null},{name:"브릿지 (유지 시간 늘리기)",category:"다열근·둔근 강화",duration:"3분",desc:"바닥에 누워 무릎을 세우고 엉덩이를 천장 방향으로 들어올려요. 10초씩 유지하며 10회 반복해요.",tip:"엉덩이를 꽉 쥐는 느낌으로 올려요.",tool:null},{name:"플랭크",category:"코어 강화",duration:"2분",desc:"팔꿈치를 바닥에 대고 발끝으로 버티는 자세예요. 30~40초씩 3세트 해요.",tip:"배꼽을 척추 쪽으로 당기는 느낌이에요.",tool:null},{name:"캣카우 자세",category:"척추 이완",duration:"2분",desc:"네발 기기 자세에서 숨을 들이쉬며 등을 내리고 내쉬며 등을 말아요.",tip:"천천히 리듬감 있게 반복해요.",tool:null},{name:"엎드려 호흡",category:"쿨다운",duration:"2분",desc:"엎드려서 이마를 손등 위에 올리고 복식호흡을 해요.",tip:"호흡에만 집중해요.",tool:null}],
+  [{name:"데드버그",category:"다열근·코어 강화",duration:"3분",desc:"바닥에 누워 팔을 천장으로 들고 무릎을 90도로 세워요. 오른팔과 왼다리를 동시에 바닥 방향으로 내렸다가 올려요.",tip:"허리가 바닥에서 뜨지 않도록 주의해요.",tool:null},{name:"사이드 플랭크",category:"측면 코어 강화",duration:"2분",desc:"옆으로 누워 한쪽 팔꿈치로 몸을 지지해요. 좌우 각 30초씩 반복해요.",tip:"처음엔 무릎을 바닥에 대고 해도 괜찮아요.",tool:null},{name:"버드독",category:"다열근 강화",duration:"2분",desc:"네발 기기 자세에서 오른팔과 왼다리를 동시에 들어 펴요. 8초 유지 후 반대쪽 반복해요.",tip:"허리가 흔들리지 않도록 코어에 힘을 주어요.",tool:null},{name:"무릎 당겨 눕기",category:"허리 이완",duration:"2분",desc:"바닥에 누워 양 무릎을 가슴으로 당겨요. 좌우로 살살 흔들어요.",tip:"허리가 시원하게 늘어나는 느낌을 느껴요.",tool:null},{name:"시체 자세",category:"쿨다운",duration:"3분",desc:"바닥에 편안히 누워 팔과 다리를 자연스럽게 벌려요.",tip:"눈을 감고 몸이 바닥으로 가라앉는 느낌을 느껴요.",tool:null}],
+  [{name:"플랭크",category:"코어·다열근 강화",duration:"3분",desc:"팔꿈치를 바닥에 대고 발끝으로 버티는 자세예요. 40초씩 3세트 해요.",tip:"배꼽을 척추 쪽으로 당기는 느낌이에요.",tool:null},{name:"버드독",category:"다열근 강화",duration:"3분",desc:"네발 기기 자세에서 오른팔과 왼다리를 동시에 들어 펴요. 8초 유지 후 반대쪽 반복해요.",tip:"허리가 흔들리지 않도록 코어에 힘을 주어요.",tool:null},{name:"슈퍼맨 자세",category:"다열근 강화",duration:"2분",desc:"엎드린 자세에서 팔과 다리를 동시에 들어올려요. 5초 유지 후 내려요.",tip:"목을 과도하게 들지 말고 척추와 일직선을 유지해요.",tool:null},{name:"브릿지",category:"둔근·다열근 강화",duration:"2분",desc:"바닥에 누워 무릎을 세우고 엉덩이를 천장 방향으로 들어올려요.",tip:"엉덩이를 꽉 쥐는 느낌으로 올려요.",tool:null},{name:"아기 자세",category:"쿨다운",duration:"2분",desc:"무릎을 꿇고 엉덩이를 발뒤꿈치에 붙이며 팔을 앞으로 뻗어요.",tip:"호흡을 깊게 하며 등 전체를 이완해요.",tool:null}],
+  [{name:"버드독",category:"다열근 강화",duration:"3분",desc:"네발 기기 자세에서 오른팔과 왼다리를 동시에 들어 펴요. 8초 유지 후 반대쪽 반복해요.",tip:"허리가 흔들리지 않도록 코어에 힘을 주어요.",tool:null},{name:"데드버그",category:"다열근·코어 강화",duration:"2분",desc:"바닥에 누워 팔을 천장으로 들고 무릎을 90도로 세워요. 오른팔과 왼다리를 동시에 바닥 방향으로 내렸다가 올려요.",tip:"허리가 바닥에서 뜨지 않도록 주의해요.",tool:null},{name:"플랭크",category:"코어 강화",duration:"2분",desc:"팔꿈치를 바닥에 대고 발끝으로 버티는 자세예요. 40초씩 3세트 해요.",tip:"배꼽을 척추 쪽으로 당기는 느낌이에요.",tool:null},{name:"비둘기 자세",category:"고관절 이완",duration:"3분",desc:"한쪽 다리를 앞으로 접고 반대 다리를 뒤로 뻗어요. 좌우 각 45초씩 유지해요.",tip:"엉덩이가 한쪽으로 기울지 않도록 해요.",tool:null},{name:"시체 자세",category:"쿨다운",duration:"3분",desc:"바닥에 편안히 누워 팔과 다리를 자연스럽게 벌려요.",tip:"눈을 감고 몸이 바닥으로 가라앉는 느낌을 느껴요.",tool:null}],
+  [{name:"브릿지 변형 (한발)",category:"장요근·다열근 협응",duration:"3분",desc:"일반 브릿지 자세에서 한쪽 다리를 펴서 들어올려요. 골반이 기울지 않도록 유지해요. 좌우 각 30초씩 해요.",tip:"처음엔 무릎만 살짝 들어올리는 정도로 시작해도 괜찮아요.",tool:null},{name:"워리어 1 자세",category:"장요근 강화",duration:"3분",desc:"한 발을 크게 앞으로 내딛고 양팔을 머리 위로 들어올려요. 좌우 각 45초씩 유지해요.",tip:"뒤쪽 다리 허벅지 앞 장요근이 당기는 느낌에 집중해요.",tool:null},{name:"버드독",category:"다열근 강화",duration:"2분",desc:"네발 기기 자세에서 오른팔과 왼다리를 동시에 들어 펴요. 8초 유지 후 반대쪽 반복해요.",tip:"허리가 흔들리지 않도록 코어에 힘을 주어요.",tool:null},{name:"낮은 런지 + 비틀기",category:"장요근·척추 협응",duration:"2분",desc:"무릎 꿇고 런지 자세에서 앞쪽 발 쪽으로 상체를 비틀어요. 좌우 각 30초씩 해요.",tip:"골반은 정면을 향하게 유지해요.",tool:null},{name:"아기 자세",category:"쿨다운",duration:"2분",desc:"무릎을 꿇고 엉덩이를 발뒤꿈치에 붙이며 팔을 앞으로 뻗어요.",tip:"호흡을 깊게 하며 등 전체를 이완해요.",tool:null}],
+  [{name:"스쿼트",category:"장요근·다열근 협응",duration:"3분",desc:"발을 어깨 너비로 벌리고 무릎과 발끝 방향을 맞춰요. 천천히 앉았다 일어나요. 15회 3세트 해요.",tip:"무릎이 발끝 안쪽으로 모이지 않도록 해요.",tool:null},{name:"데드버그",category:"다열근·코어 강화",duration:"3분",desc:"바닥에 누워 팔을 천장으로 들고 무릎을 90도로 세워요. 오른팔과 왼다리를 동시에 바닥 방향으로 내렸다가 올려요.",tip:"허리가 바닥에서 뜨지 않도록 주의해요.",tool:null},{name:"서서 무릎 들기",category:"장요근 활성화",duration:"2분",desc:"서서 좌우 번갈아 무릎을 계속 들어올려요. 2분간 해요.",tip:"허리가 뒤로 젖혀지지 않도록 복부에 힘을 주어요.",tool:null},{name:"비둘기 자세",category:"고관절 이완",duration:"2분",desc:"한쪽 다리를 앞으로 접고 반대 다리를 뒤로 뻗어요. 좌우 각 30초씩 유지해요.",tip:"엉덩이가 한쪽으로 기울지 않도록 해요.",tool:null},{name:"복식호흡",category:"쿨다운",duration:"2분",desc:"편안히 누워 배에 손을 올리고 숨을 들이쉴 때 배가 올라오도록 해요.",tip:"가슴이 아닌 배로 호흡하는 느낌에 집중해요.",tool:null}],
+  [{name:"사이드 런지",category:"고관절·장요근 강화",duration:"3분",desc:"한쪽으로 크게 발을 내딛고 그쪽 무릎을 구부려요. 반대 다리는 쭉 펴요. 좌우 각 10회씩 해요.",tip:"내딛는 발의 무릎이 발끝을 넘지 않도록 해요.",tool:null},{name:"브릿지 변형 (한발)",category:"장요근·다열근 협응",duration:"3분",desc:"일반 브릿지 자세에서 한쪽 다리를 펴서 들어올려요. 좌우 각 30초씩 해요.",tip:"골반이 기울지 않도록 유지해요.",tool:null},{name:"버드독",category:"다열근 강화",duration:"2분",desc:"네발 기기 자세에서 오른팔과 왼다리를 동시에 들어 펴요. 8초 유지 후 반대쪽 반복해요.",tip:"허리가 흔들리지 않도록 코어에 힘을 주어요.",tool:null},{name:"워리어 1 자세",category:"장요근 강화",duration:"2분",desc:"한 발을 크게 앞으로 내딛고 양팔을 머리 위로 들어올려요. 좌우 각 30초씩 유지해요.",tip:"뒤쪽 다리 허벅지 앞 장요근이 당기는 느낌에 집중해요.",tool:null},{name:"시체 자세",category:"쿨다운",duration:"2분",desc:"바닥에 편안히 누워 팔과 다리를 자연스럽게 벌려요.",tip:"눈을 감고 몸이 바닥으로 가라앉는 느낌을 느껴요.",tool:null}],
+  [{name:"한 발 서기",category:"균형·코어 강화",duration:"3분",desc:"한 발로 서서 30초씩 유지해요. 좌우 각 3회 반복해요.",tip:"시선을 고정하면 균형 잡기가 쉬워요.",tool:null},{name:"서서 무릎 들기 (유지)",category:"장요근 강화",duration:"3분",desc:"서서 한쪽 무릎을 배꼽 높이까지 들어올려요. 5초 유지 후 내려요. 좌우 각 15회씩 해요.",tip:"허리가 뒤로 젖혀지지 않도록 복부에 힘을 주어요.",tool:null},{name:"플랭크",category:"코어 강화",duration:"2분",desc:"팔꿈치를 바닥에 대고 발끝으로 버티는 자세예요. 40초씩 3세트 해요.",tip:"배꼽을 척추 쪽으로 당기는 느낌이에요.",tool:null},{name:"캣카우 자세",category:"척추 이완",duration:"2분",desc:"네발 기기 자세에서 숨을 들이쉬며 등을 내리고 내쉬며 등을 말아요.",tip:"천천히 리듬감 있게 반복해요.",tool:null},{name:"아기 자세",category:"쿨다운",duration:"2분",desc:"무릎을 꿇고 엉덩이를 발뒤꿈치에 붙이며 팔을 앞으로 뻗어요.",tip:"호흡을 깊게 하며 등 전체를 이완해요.",tool:null}],
+  [{name:"스쿼트 + 무릎 들기",category:"장요근·다열근 협응",duration:"3분",desc:"스쿼트 후 일어나면서 한쪽 무릎을 들어올려요. 좌우 번갈아 15회씩 해요.",tip:"허리가 뒤로 젖혀지지 않도록 복부에 힘을 주어요.",tool:null},{name:"워리어 1 + 비틀기",category:"장요근·척추 협응",duration:"3분",desc:"워리어 1 자세에서 상체를 앞발 쪽으로 비틀어요. 좌우 각 30초씩 유지해요.",tip:"골반은 정면을 향하게 유지해요.",tool:null},{name:"사이드 플랭크",category:"측면 코어 강화",duration:"2분",desc:"옆으로 누워 한쪽 팔꿈치로 몸을 지지해요. 좌우 각 30초씩 반복해요.",tip:"처음엔 무릎을 바닥에 대고 해도 괜찮아요.",tool:null},{name:"비둘기 자세",category:"고관절 이완",duration:"2분",desc:"한쪽 다리를 앞으로 접고 반대 다리를 뒤로 뻗어요. 좌우 각 30초씩 유지해요.",tip:"엉덩이가 한쪽으로 기울지 않도록 해요.",tool:null},{name:"복식호흡",category:"쿨다운",duration:"2분",desc:"편안히 누워 배에 손을 올리고 숨을 들이쉴 때 배가 올라오도록 해요.",tip:"가슴이 아닌 배로 호흡하는 느낌에 집중해요.",tool:null}],
+  [{name:"다운독 + 무릎 당기기",category:"전신 협응",duration:"3분",desc:"다운독 자세에서 한쪽 무릎을 가슴 쪽으로 당겨요. 좌우 번갈아 10회씩 해요.",tip:"코어를 단단히 유지하며 움직여요.",tool:null},{name:"브릿지 변형 (한발)",category:"장요근·다열근 협응",duration:"3분",desc:"일반 브릿지 자세에서 한쪽 다리를 펴서 들어올려요. 좌우 각 40초씩 해요.",tip:"골반이 기울지 않도록 유지해요.",tool:null},{name:"데드버그",category:"다열근·코어 강화",duration:"2분",desc:"바닥에 누워 팔을 천장으로 들고 무릎을 90도로 세워요. 오른팔과 왼다리를 동시에 바닥 방향으로 내렸다가 올려요.",tip:"허리가 바닥에서 뜨지 않도록 주의해요.",tool:null},{name:"낮은 런지 + 비틀기",category:"장요근·척추 협응",duration:"2분",desc:"무릎 꿇고 런지 자세에서 앞쪽 발 쪽으로 상체를 비틀어요. 좌우 각 30초씩 해요.",tip:"골반은 정면을 향하게 유지해요.",tool:null},{name:"시체 자세",category:"쿨다운",duration:"2분",desc:"바닥에 편안히 누워 팔과 다리를 자연스럽게 벌려요.",tip:"눈을 감고 몸이 바닥으로 가라앉는 느낌을 느껴요.",tool:null}],
+  [{name:"전신 스트레칭",category:"전신 이완",duration:"2분",desc:"바닥에 누워 팔을 머리 위로 뻗고 발끝을 당겨 온몸을 길게 늘여요.",tip:"호흡을 들이쉬며 늘이고 내쉬며 이완해요.",tool:null},{name:"비둘기 자세",category:"고관절 이완",duration:"4분",desc:"한쪽 다리를 앞으로 접고 반대 다리를 뒤로 뻗어요. 좌우 각 1분씩 유지해요.",tip:"엉덩이가 한쪽으로 기울지 않도록 해요.",tool:null},{name:"캣카우 자세",category:"척추 이완",duration:"2분",desc:"네발 기기 자세에서 숨을 들이쉬며 등을 내리고 내쉬며 등을 말아요.",tip:"천천히 리듬감 있게 반복해요.",tool:null},{name:"누워서 척추 비틀기",category:"척추 이완",duration:"2분",desc:"바닥에 누워 한쪽 무릎을 반대편으로 넘기며 척추를 비틀어요.",tip:"양쪽 어깨는 바닥에 붙인 채로 해요.",tool:null},{name:"시체 자세",category:"쿨다운",duration:"3분",desc:"바닥에 편안히 누워 팔과 다리를 자연스럽게 벌려요.",tip:"눈을 감고 몸이 바닥으로 가라앉는 느낌을 느껴요.",tool:null}],
+  [{name:"스쿼트 + 무릎 들기",category:"장요근·다열근 협응",duration:"3분",desc:"스쿼트 후 일어나면서 한쪽 무릎을 들어올려요. 좌우 번갈아 20회씩 해요.",tip:"허리가 뒤로 젖혀지지 않도록 복부에 힘을 주어요.",tool:null},{name:"워리어 1 자세",category:"장요근 강화",duration:"2분",desc:"한 발을 크게 앞으로 내딛고 양팔을 머리 위로 들어올려요. 좌우 각 40초씩 유지해요.",tip:"뒤쪽 다리 허벅지 앞 장요근이 당기는 느낌에 집중해요.",tool:null},{name:"버드독",category:"다열근 강화",duration:"2분",desc:"네발 기기 자세에서 오른팔과 왼다리를 동시에 들어 펴요. 8초 유지 후 반대쪽 반복해요.",tip:"허리가 흔들리지 않도록 코어에 힘을 주어요.",tool:null},{name:"비둘기 자세",category:"고관절 이완",duration:"3분",desc:"한쪽 다리를 앞으로 접고 반대 다리를 뒤로 뻗어요. 좌우 각 45초씩 유지해요.",tip:"엉덩이가 한쪽으로 기울지 않도록 해요.",tool:null},{name:"시체 자세",category:"쿨다운",duration:"2분",desc:"바닥에 편안히 누워 팔과 다리를 자연스럽게 벌려요.",tip:"눈을 감고 몸이 바닥으로 가라앉는 느낌을 느껴요.",tool:null}],
+  [{name:"앉아서 옆으로 기울기",category:"머메이드 준비",duration:"3분",desc:"바닥에 앉아 한쪽 팔을 위로 들고 옆으로 천천히 기울어요. 옆구리가 길게 늘어나는 느낌을 느껴요. 좌우 각 40초씩 유지해요.",tip:"엉덩이가 바닥에서 뜨지 않도록 해요.",tool:null},{name:"나비 자세 + 전굴",category:"고관절·장요근 이완",duration:"3분",desc:"나비 자세에서 상체를 천천히 앞으로 숙여요. 팔을 앞으로 뻗어요.",tip:"골반이 앞으로 기울도록 해요.",tool:null},{name:"비둘기 자세",category:"고관절 이완",duration:"3분",desc:"한쪽 다리를 앞으로 접고 반대 다리를 뒤로 뻗어요. 좌우 각 45초씩 유지해요.",tip:"엉덩이가 한쪽으로 기울지 않도록 해요.",tool:null},{name:"캣카우 자세",category:"척추 이완",duration:"2분",desc:"네발 기기 자세에서 숨을 들이쉬며 등을 내리고 내쉬며 등을 말아요.",tip:"천천히 리듬감 있게 반복해요.",tool:null},{name:"아기 자세",category:"쿨다운",duration:"2분",desc:"무릎을 꿇고 엉덩이를 발뒤꿈치에 붙이며 팔을 앞으로 뻗어요.",tip:"호흡을 깊게 하며 등 전체를 이완해요.",tool:null}],
+  [{name:"코브라 자세",category:"척추 신전",duration:"3분",desc:"엎드려서 손을 어깨 아래에 두고 팔꿈치를 펴며 상체를 들어올려요. 5초 유지 후 내려요.",tip:"등 근육으로 들어올리는 느낌이에요.",tool:null},{name:"앉아서 옆으로 기울기",category:"측면 유연성",duration:"3분",desc:"바닥에 앉아 한쪽 팔을 위로 들고 옆으로 천천히 기울어요. 좌우 각 40초씩 유지해요.",tip:"엉덩이가 바닥에서 뜨지 않도록 해요.",tool:null},{name:"낮은 런지 + 비틀기",category:"장요근·척추 협응",duration:"3분",desc:"무릎 꿇고 런지 자세에서 앞쪽 발 쪽으로 상체를 비틀어요. 좌우 각 40초씩 해요.",tip:"골반은 정면을 향하게 유지해요.",tool:null},{name:"누워서 척추 비틀기",category:"척추 이완",duration:"2분",desc:"바닥에 누워 한쪽 무릎을 반대편으로 넘기며 척추를 비틀어요.",tip:"양쪽 어깨는 바닥에 붙인 채로 해요.",tool:null},{name:"복식호흡",category:"쿨다운",duration:"2분",desc:"편안히 누워 배에 손을 올리고 숨을 들이쉴 때 배가 올라오도록 해요.",tip:"가슴이 아닌 배로 호흡하는 느낌에 집중해요.",tool:null}],
+  [{name:"옆으로 누워 다리 들기",category:"머메이드 동작",duration:"3분",desc:"옆으로 누워 위쪽 다리를 천천히 들어올려요. 발끝을 앞으로 향하게 하고 20회 반복해요.",tip:"몸이 앞뒤로 흔들리지 않도록 복부에 힘을 주어요.",tool:null},{name:"코브라 자세",category:"척추 신전",duration:"2분",desc:"엎드려서 손을 어깨 아래에 두고 팔꿈치를 펴며 상체를 들어올려요.",tip:"등 근육으로 들어올리는 느낌이에요.",tool:null},{name:"앉아서 옆으로 기울기",category:"측면 유연성",duration:"2분",desc:"바닥에 앉아 한쪽 팔을 위로 들고 옆으로 천천히 기울어요. 좌우 각 30초씩 유지해요.",tip:"엉덩이가 바닥에서 뜨지 않도록 해요.",tool:null},{name:"비둘기 자세",category:"고관절 이완",duration:"3분",desc:"한쪽 다리를 앞으로 접고 반대 다리를 뒤로 뻗어요. 좌우 각 45초씩 유지해요.",tip:"엉덩이가 한쪽으로 기울지 않도록 해요.",tool:null},{name:"시체 자세",category:"쿨다운",duration:"2분",desc:"바닥에 편안히 누워 팔과 다리를 자연스럽게 벌려요.",tip:"눈을 감고 몸이 바닥으로 가라앉는 느낌을 느껴요.",tool:null}],
+  [{name:"다운독 + 코브라 흐름",category:"전신 통합",duration:"3분",desc:"다운독 자세에서 앞으로 흘러 코브라 자세로 이어요. 다시 다운독으로 돌아와요. 5회 반복해요.",tip:"호흡에 맞춰 물 흐르듯 부드럽게 이어요.",tool:null},{name:"워리어 1 자세",category:"장요근 강화",duration:"2분",desc:"한 발을 크게 앞으로 내딛고 양팔을 머리 위로 들어올려요. 좌우 각 30초씩 유지해요.",tip:"뒤쪽 다리 허벅지 앞 장요근이 당기는 느낌에 집중해요.",tool:null},{name:"사이드 플랭크",category:"측면 코어 강화",duration:"2분",desc:"옆으로 누워 한쪽 팔꿈치로 몸을 지지해요. 좌우 각 30초씩 반복해요.",tip:"처음엔 무릎을 바닥에 대고 해도 괜찮아요.",tool:null},{name:"앉아서 옆으로 기울기",category:"측면 유연성",duration:"2분",desc:"바닥에 앉아 한쪽 팔을 위로 들고 옆으로 천천히 기울어요. 좌우 각 30초씩 유지해요.",tip:"엉덩이가 바닥에서 뜨지 않도록 해요.",tool:null},{name:"아기 자세",category:"쿨다운",duration:"2분",desc:"무릎을 꿇고 엉덩이를 발뒤꿈치에 붙이며 팔을 앞으로 뻗어요.",tip:"호흡을 깊게 하며 등 전체를 이완해요.",tool:null}],
+  [{name:"코브라 자세",category:"척추 신전",duration:"3분",desc:"엎드려서 손을 어깨 아래에 두고 팔꿈치를 펴며 상체를 들어올려요. 10초 유지 후 내려요.",tip:"등 근육으로 들어올리는 느낌이에요.",tool:null},{name:"비둘기 자세",category:"고관절 이완",duration:"4분",desc:"한쪽 다리를 앞으로 접고 반대 다리를 뒤로 뻗어요. 좌우 각 1분씩 유지해요.",tip:"엉덩이가 한쪽으로 기울지 않도록 해요.",tool:null},{name:"앉아서 전굴",category:"햄스트링·허리 이완",duration:"2분",desc:"바닥에 다리를 펴고 앉아 상체를 천천히 앞으로 숙여요.",tip:"골반이 앞으로 기울도록 해요.",tool:null},{name:"옆으로 누워 다리 들기",category:"머메이드 동작",duration:"2분",desc:"옆으로 누워 위쪽 다리를 천천히 들어올려요. 20회 반복해요.",tip:"몸이 앞뒤로 흔들리지 않도록 복부에 힘을 주어요.",tool:null},{name:"복식호흡",category:"쿨다운",duration:"2분",desc:"편안히 누워 배에 손을 올리고 숨을 들이쉴 때 배가 올라오도록 해요.",tip:"가슴이 아닌 배로 호흡하는 느낌에 집중해요.",tool:null}],
+  [{name:"다운독 + 코브라 흐름",category:"전신 통합",duration:"3분",desc:"다운독 자세에서 앞으로 흘러 코브라 자세로 이어요. 8회 반복해요.",tip:"호흡에 맞춰 물 흐르듯 부드럽게 이어요.",tool:null},{name:"옆으로 누워 다리 들기",category:"머메이드 동작",duration:"3분",desc:"옆으로 누워 위쪽 다리를 천천히 들어올려요. 25회 반복해요.",tip:"몸이 앞뒤로 흔들리지 않도록 복부에 힘을 주어요.",tool:null},{name:"코브라 자세",category:"척추 신전",duration:"2분",desc:"엎드려서 손을 어깨 아래에 두고 팔꿈치를 펴며 상체를 들어올려요.",tip:"등 근육으로 들어올리는 느낌이에요.",tool:null},{name:"비둘기 자세",category:"고관절 이완",duration:"2분",desc:"한쪽 다리를 앞으로 접고 반대 다리를 뒤로 뻗어요. 좌우 각 30초씩 유지해요.",tip:"엉덩이가 한쪽으로 기울지 않도록 해요.",tool:null},{name:"시체 자세",category:"쿨다운",duration:"3분",desc:"바닥에 편안히 누워 팔과 다리를 자연스럽게 벌려요.",tip:"눈을 감고 몸이 바닥으로 가라앉는 느낌을 느껴요.",tool:null}],
+  [{name:"워리어 1 + 비틀기",category:"전신 통합",duration:"3분",desc:"워리어 1 자세에서 상체를 앞발 쪽으로 비틀어요. 좌우 각 45초씩 유지해요.",tip:"골반은 정면을 향하게 유지해요.",tool:null},{name:"스쿼트 + 무릎 들기",category:"장요근·다열근 협응",duration:"3분",desc:"스쿼트 후 일어나면서 한쪽 무릎을 들어올려요. 좌우 번갈아 20회씩 해요.",tip:"허리가 뒤로 젖혀지지 않도록 복부에 힘을 주어요.",tool:null},{name:"앉아서 옆으로 기울기",category:"측면 유연성",duration:"2분",desc:"바닥에 앉아 한쪽 팔을 위로 들고 옆으로 천천히 기울어요. 좌우 각 30초씩 유지해요.",tip:"엉덩이가 바닥에서 뜨지 않도록 해요.",tool:null},{name:"캣카우 자세",category:"척추 이완",duration:"2분",desc:"네발 기기 자세에서 숨을 들이쉬며 등을 내리고 내쉬며 등을 말아요.",tip:"천천히 리듬감 있게 반복해요.",tool:null},{name:"아기 자세",category:"쿨다운",duration:"2분",desc:"무릎을 꿇고 엉덩이를 발뒤꿈치에 붙이며 팔을 앞으로 뻗어요.",tip:"호흡을 깊게 하며 등 전체를 이완해요.",tool:null}],
+  [{name:"다운독 + 코브라 흐름",category:"전신 통합",duration:"3분",desc:"다운독 자세에서 앞으로 흘러 코브라 자세로 이어요. 10회 반복해요.",tip:"호흡에 맞춰 물 흐르듯 부드럽게 이어요.",tool:null},{name:"비둘기 자세",category:"고관절 이완",duration:"4분",desc:"한쪽 다리를 앞으로 접고 반대 다리를 뒤로 뻗어요. 좌우 각 1분씩 깊게 유지해요.",tip:"엉덩이가 한쪽으로 기울지 않도록 해요.",tool:null},{name:"옆으로 누워 다리 들기",category:"머메이드 동작",duration:"2분",desc:"옆으로 누워 위쪽 다리를 천천히 들어올려요. 25회 반복해요.",tip:"몸이 앞뒤로 흔들리지 않도록 복부에 힘을 주어요.",tool:null},{name:"플랭크",category:"코어 강화",duration:"2분",desc:"팔꿈치를 바닥에 대고 발끝으로 버티는 자세예요. 45초씩 3세트 해요.",tip:"배꼽을 척추 쪽으로 당기는 느낌이에요.",tool:null},{name:"복식호흡",category:"쿨다운",duration:"2분",desc:"편안히 누워 배에 손을 올리고 숨을 들이쉴 때 배가 올라오도록 해요.",tip:"가슴이 아닌 배로 호흡하는 느낌에 집중해요.",tool:null}],
+  [{name:"전신 스트레칭 루틴",category:"전신 통합",duration:"3분",desc:"누워서 전신 늘이기 → 캣카우 → 다운독 → 코브라 순서로 흘러요. 천천히 2회 반복해요.",tip:"각 자세에서 호흡을 느끼며 이어가요.",tool:null},{name:"비둘기 자세",category:"고관절 이완",duration:"4분",desc:"한쪽 다리를 앞으로 접고 반대 다리를 뒤로 뻗어요. 좌우 각 1분씩 깊게 유지해요.",tip:"엉덩이가 한쪽으로 기울지 않도록 해요.",tool:null},{name:"앉아서 옆으로 기울기",category:"측면 유연성",duration:"2분",desc:"바닥에 앉아 한쪽 팔을 위로 들고 옆으로 천천히 기울어요. 좌우 각 40초씩 유지해요.",tip:"엉덩이가 바닥에서 뜨지 않도록 해요.",tool:null},{name:"옆으로 누워 다리 들기",category:"머메이드 동작",duration:"2분",desc:"옆으로 누워 위쪽 다리를 천천히 들어올려요. 30회 반복해요.",tip:"몸이 앞뒤로 흔들리지 않도록 복부에 힘을 주어요.",tool:null},{name:"시체 자세",category:"쿨다운",duration:"3분",desc:"바닥에 편안히 누워 팔과 다리를 자연스럽게 벌려요.",tip:"눈을 감고 몸이 바닥으로 가라앉는 느낌을 느껴요.",tool:null}],
+  // DAY 50 🎉
+  [{name:"전신 스트레칭 루틴",category:"전신 통합",duration:"3분",desc:"누워서 전신 늘이기 → 캣카우 → 다운독 → 코브라 순서로 흘러요. 천천히 3회 반복해요.",tip:"각 자세에서 호흡을 느끼며 이어가요.",tool:null},{name:"비둘기 자세",category:"고관절 이완",duration:"4분",desc:"한쪽 다리를 앞으로 접고 반대 다리를 뒤로 뻗어요. 좌우 각 1분씩 깊게 유지해요.",tip:"엉덩이가 한쪽으로 기울지 않도록 해요.",tool:null},{name:"워리어 1 자세",category:"장요근 강화",duration:"2분",desc:"한 발을 크게 앞으로 내딛고 양팔을 머리 위로 들어올려요. 좌우 각 40초씩 유지해요.",tip:"뒤쪽 다리 허벅지 앞 장요근이 당기는 느낌에 집중해요.",tool:null},{name:"옆으로 누워 다리 들기",category:"머메이드 동작",duration:"2분",desc:"옆으로 누워 위쪽 다리를 천천히 들어올려요. 30회 반복해요.",tip:"몸이 앞뒤로 흔들리지 않도록 복부에 힘을 주어요.",tool:null},{name:"시체 자세",category:"쿨다운",duration:"5분",desc:"바닥에 편안히 누워 팔과 다리를 자연스럽게 벌려요. 50일간의 여정을 축하하며 온몸의 힘을 빼고 호흡에만 집중해요.",tip:"눈을 감고 몸이 바닥으로 가라앉는 느낌을 느껴요. 정말 수고하셨어요 🌊",tool:null}],
+];
+
+const weekThemes = ["워밍업 — 몸과 친해지기","워밍업 — 몸과 친해지기","장요근 기초 이완 + 활성화","장요근 기초 이완 + 활성화","다열근 기초 강화 + 코어 안정화","다열근 기초 강화 + 코어 안정화","장요근·다열근 협응 + 심화","장요근·다열근 협응 + 심화"];
+const emojis = ["🧜","🐬","🐚","🌊","✨"];
+
+// ════════════════════════════════
+// STATE
+// ════════════════════════════════
+let completedDays = JSON.parse(localStorage.getItem('completedDays') || '[]');
+let completedMoves = JSON.parse(localStorage.getItem('completedMoves') || '[]');
+let currentMoveIndex = 0;
+
+function getCurrentDay() {
+  return Math.min(completedDays.length + 1, 50);
+}
+
+function save() {
+  localStorage.setItem('completedDays', JSON.stringify(completedDays));
+  localStorage.setItem('completedMoves', JSON.stringify(completedMoves));
+}
+
+// ════════════════════════════════
+// PAGE NAVIGATION
+// ════════════════════════════════
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  const tabs = document.querySelectorAll('.nav-tab');
+  const map = {home:0, workout:1, calendar:2, timer:3};
+  tabs[map[name]].classList.add('active');
+
+  if (name === 'home') renderHome();
+  if (name === 'workout') renderWorkout();
+  if (name === 'calendar') renderCalendar();
+}
+
+// ════════════════════════════════
+// HOME
+// ════════════════════════════════
+function renderHome() {
+  const day = getCurrentDay();
+  const progress = Math.round((completedDays.length / 50) * 100);
+  const moves = allDayMoves[day - 1];
+
+  document.getElementById('heroBadge').textContent = `DAY ${day} / 50`;
+  document.getElementById('headerDay').textContent = `DAY ${day} / 50`;
+  document.getElementById('homeProgressFill').style.width = progress + '%';
+  document.getElementById('homeProgressLabel').textContent = progress + '% 완료';
+
+  // streak
+  const streakRow = document.getElementById('streakRow');
+  streakRow.innerHTML = '';
+  for (let i = 1; i <= 14; i++) {
+    const dot = document.createElement('div');
+    const isDone = completedDays.includes(i);
+    const isToday = i === day;
+    dot.className = 'streak-dot ' + (isDone ? 'done' : isToday ? 'today' : 'future');
+    dot.textContent = isDone ? '✓' : i;
+    streakRow.appendChild(dot);
+  }
+
+  // missions
+  const list = document.getElementById('missionList');
+  list.innerHTML = '';
+  const nextMove = completedMoves.length;
+  const allDone = completedMoves.length === moves.length;
+
+  moves.forEach((move, i) => {
+    const isDone = completedMoves.includes(i);
+    const isActive = !allDone && i === nextMove;
+    const card = document.createElement('div');
+    card.className = 'mission-card';
+    card.onclick = () => showPage('workout');
+    card.innerHTML = `
+      <div class="mission-icon" style="background:${isDone ? '#b0ede8' : '#e0f7f5'}">${emojis[i % 5]}</div>
+      <div class="mission-info">
+        <div class="mission-name">${move.name}</div>
+        <div class="mission-meta">동작 ${i + 1}</div>
+      </div>
+      <div class="badge ${isDone ? 'badge-done' : isActive ? 'badge-active' : 'badge-locked'}">
+        ${isDone ? '✓ 완료' : isActive ? '진행 중' : '잠금'}
+      </div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+// ════════════════════════════════
+// WORKOUT
+// ════════════════════════════════
+function renderWorkout() {
+  const day = getCurrentDay();
+  const moves = allDayMoves[day - 1];
+  completedMoves = JSON.parse(localStorage.getItem('completedMoves') || '[]');
+
+  if (completedMoves.length < moves.length) {
+    currentMoveIndex = completedMoves.length;
+  }
+
+  document.getElementById('workoutDayLabel').textContent = `DAY ${day}`;
+  updateWorkoutUI(moves);
+}
+
+function updateWorkoutUI(moves) {
+  const pct = (completedMoves.length / moves.length) * 100;
+  document.getElementById('workoutProgressBar').style.width = pct + '%';
+  document.getElementById('workoutProgressText').textContent = `${completedMoves.length} / ${moves.length} 완료`;
+
+  // tabs
+  const tabs = document.getElementById('moveTabs');
+  tabs.innerHTML = '';
+  moves.forEach((m, i) => {
+    const tab = document.createElement('button');
+    const isDone = completedMoves.includes(i);
+    tab.className = 'move-tab' + (currentMoveIndex === i ? ' active' : '') + (isDone ? ' done' : '');
+    tab.textContent = isDone ? '✓' : i + 1;
+    tab.onclick = () => { currentMoveIndex = i; updateWorkoutUI(moves); };
+    tabs.appendChild(tab);
+  });
+
+  // card
+  const move = moves[currentMoveIndex];
+  const isCompleted = completedMoves.includes(currentMoveIndex);
+  const allDone = completedMoves.length === moves.length;
+  const day = getCurrentDay();
+
+  document.getElementById('moveCard').innerHTML = `
+    ${move.tool ? `<div class="tool-badge">🟡 ${move.tool} 필요</div>` : ''}
+    <div class="move-category">${move.category}</div>
+    <div class="move-name">${move.name}</div>
+    <div class="move-duration">⏱ ${move.duration}</div>
+    <div class="divider"></div>
+    <div class="section-title-small">동작 설명</div>
+    <div class="move-desc">${move.desc}</div>
+    <div class="tip-box">
+      <div class="tip-title">💡 강사 팁</div>
+      <div class="tip-text">${move.tip}</div>
+    </div>
+  `;
+
+  const doneArea = document.getElementById('doneArea');
+  if (!allDone) {
+    doneArea.innerHTML = `
+      <button class="done-btn ${isCompleted ? 'completed' : ''}" onclick="handleComplete()">
+        ${isCompleted ? '✓ 완료됨 — 다음 동작으로' : '이 동작 완료했어요 ✓'}
+      </button>
+    `;
+  } else {
+    doneArea.innerHTML = `
+      <div class="all-done-card">
+        <div class="all-done-title">${day === 50 ? '🎉 50일 챌린지 완주!' : '🎉 오늘 루틴 완료!'}</div>
+        <div class="all-done-desc">${day === 50 ? '50일간의 머메이드 여정을 완주하셨어요! 정말 대단해요 🌊🧜‍♀️' : '진행률이 저장됐어요! 홈에서 확인해보세요 🌊'}</div>
+        <button class="home-btn" onclick="showPage('home')">홈으로 돌아가기</button>
+      </div>
+    `;
+  }
+}
+
+function handleComplete() {
+  const day = getCurrentDay();
+  const moves = allDayMoves[day - 1];
+
+  if (!completedMoves.includes(currentMoveIndex)) {
+    completedMoves = [...completedMoves, currentMoveIndex];
+    save();
+  }
+
+  // 모든 동작 완료 시 DAY 진도 올리기
+  if (completedMoves.length === moves.length) {
+    if (!completedDays.includes(day)) {
+      completedDays = [...completedDays, day];
+    }
+    localStorage.setItem('completedDays', JSON.stringify(completedDays));
+    localStorage.removeItem('completedMoves');
+    completedMoves = [];
+  }
+
+  if (currentMoveIndex < moves.length - 1) {
+    currentMoveIndex++;
+  }
+
+  updateWorkoutUI(moves);
+}
+
+// ════════════════════════════════
+// CALENDAR
+// ════════════════════════════════
+function renderCalendar() {
+  completedDays = JSON.parse(localStorage.getItem('completedDays') || '[]');
+  const day = getCurrentDay();
+
+  document.getElementById('calendarSub').textContent = `Day ${day} 진행 중 · ${50 - completedDays.length}일 남음`;
+  document.getElementById('statDone').textContent = completedDays.length;
+  document.getElementById('statToday').textContent = day;
+  document.getElementById('statLeft').textContent = 50 - completedDays.length;
+
+  const grid = document.getElementById('calendarGrid');
+  grid.innerHTML = '';
+
+  for (let w = 0; w < 8; w++) {
+    const block = document.createElement('div');
+    block.className = 'week-block';
+    const startDay = w * 7 + 1;
+    const endDay = Math.min(startDay + 6, 50);
+
+    block.innerHTML = `
+      <div class="week-header">
+        <span class="week-label">${w + 1}주</span>
+        <span class="week-theme">${weekThemes[w]}</span>
+      </div>
+      <div class="day-row" id="week-${w}"></div>
+    `;
+    grid.appendChild(block);
+
+    const row = block.querySelector('.day-row');
+    for (let d = startDay; d <= endDay; d++) {
+      const isDone = completedDays.includes(d);
+      const isToday = d === day;
+      const dot = document.createElement('div');
+      dot.className = 'cal-dot ' + (isDone ? 'done' : isToday ? 'today' : 'future');
+      dot.textContent = isDone ? '✓' : d;
+      dot.onclick = () => openDayModal(d);
+      row.appendChild(dot);
+    }
+  }
+}
+
+function openDayModal(d) {
+  const day = getCurrentDay();
+  const isDone = completedDays.includes(d);
+  const isToday = d === day;
+  const moves = allDayMoves[d - 1];
+  const theme = weekThemes[Math.floor((d - 1) / 7)];
+
+  const movesHtml = moves.map((m, i) => `
+    <div class="modal-move-item">
+      <div class="modal-move-num">${i + 1}</div>
+      <div class="modal-move-name">${m.name}</div>
+    </div>
+  `).join('');
+
+  let badgeHtml = '';
+  if (isDone) badgeHtml = `<div class="modal-badge done">✓ 완료한 루틴이에요 🎉</div>`;
+  else if (isToday) badgeHtml = `<div class="modal-badge today" onclick="closeDayModalDirect(); showPage('workout')">오늘 루틴 시작하기 🌊</div>`;
+  else badgeHtml = `<div class="modal-badge future">🔒 아직 잠긴 루틴이에요</div>`;
+
+  document.getElementById('modalCard').innerHTML = `
+    <div class="modal-header">
+      <div class="modal-title">Day ${d}</div>
+      <button class="modal-close" onclick="closeDayModalDirect()">✕</button>
+    </div>
+    <div class="modal-theme">${theme}</div>
+    <div class="modal-moves-title">오늘의 동작</div>
+    ${movesHtml}
+    ${badgeHtml}
+  `;
+  document.getElementById('dayModal').classList.add('open');
+}
+
+function closeDayModal(e) {
+  if (e.target === document.getElementById('dayModal')) {
+    document.getElementById('dayModal').classList.remove('open');
+  }
+}
+function closeDayModalDirect() {
+  document.getElementById('dayModal').classList.remove('open');
+}
+
+// ════════════════════════════════
+// TIMER
+// ════════════════════════════════
+let timerSeconds = 60;
+let timerRemaining = 60;
+let timerInterval = null;
+let timerRunning = false;
+
+function setTimer(s) {
+  resetTimer();
+  timerSeconds = s;
+  timerRemaining = s;
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  updateTimerDisplay();
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(timerRemaining / 60);
+  const s = timerRemaining % 60;
+  document.getElementById('timerDisplay').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+}
+
+function toggleTimer() {
+  if (timerRunning) {
+    clearInterval(timerInterval);
+    timerRunning = false;
+    document.getElementById('timerStartBtn').textContent = '▶ 계속';
+  } else {
+    timerRunning = true;
+    document.getElementById('timerStartBtn').textContent = '⏸ 일시정지';
+    timerInterval = setInterval(() => {
+      timerRemaining--;
+      updateTimerDisplay();
+      if (timerRemaining <= 0) {
+        clearInterval(timerInterval);
+        timerRunning = false;
+        document.getElementById('timerStartBtn').textContent = '▶ 시작';
+        document.getElementById('timerDisplay').textContent = '완료! 🎉';
+      }
+    }, 1000);
+  }
+}
+
+function resetTimer() {
+  clearInterval(timerInterval);
+  timerRunning = false;
+  timerRemaining = timerSeconds;
+  document.getElementById('timerStartBtn').textContent = '▶ 시작';
+  updateTimerDisplay();
+}
+
+// ════════════════════════════════
+// INIT
+// ════════════════════════════════
+renderHome();
+</script>
+</body>
+</html>
